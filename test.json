@@ -1,0 +1,36 @@
+[
+    {
+        "category": "Android",
+        "cheats": [
+            {
+                "name": "Android Studio",
+                "path": "/docs/cheatsheets/android/android-studio.md"
+            },
+            {
+                "name": "Hilt",
+                "path": "/docs/cheatsheets/android/Hilt.md"
+            },
+            {
+                "name": "react native",
+                "path": "/docs/cheatsheets/android/react-native.md"
+            }
+        ]
+    },
+    {
+        "category": "design",
+        "cheats": [
+            {
+                "name": "figma",
+                "path": "/docs/cheatsheets/android/figma.md"
+            },
+            {
+                "name": "adobe XD",
+                "path": "/docs/cheatsheets/android/adobe-xd.md"
+            },
+            {
+                "name": "colors",
+                "path": "/docs/cheatsheets/android/colors.md"
+            }
+        ]
+    }
+]
