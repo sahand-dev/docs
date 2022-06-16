@@ -3,7 +3,7 @@ const path = require('path');
 
 
 function crawler(prop) {
-  const origin = __dirname + '\\content\\' + prop;
+  const origin = __dirname + '/content/' + prop;
 
   const read = (path) => {
     return fs.readdirSync(path, { withFileTypes: true });
