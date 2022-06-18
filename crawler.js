@@ -4,6 +4,8 @@ const path = require('path');
 
 function crawler(prop) {
   const origin = __dirname + '/content/' + prop;
+  // const domain = 'https://cheatsheet.developix.ir/API/content'
+  const domain = 'https://sahand-dev.github.io/docs/content/'
 
   const read = (path) => {
     return fs.readdirSync(path, { withFileTypes: true });
@@ -12,20 +14,21 @@ function crawler(prop) {
   let dirTree = [];
   (() => {
     const rawData = read(origin);
-
+  
     rawData.forEach((category, i) => {
       let fromPath = path.join(origin, category.name);
+      let domainPath = path.join(domain, category.name);
       if (prop == "cheatsheets") {
         if (category.isDirectory()) {
-          dirTree.push({ category: category.name, path: fromPath });
+          dirTree.push({ category: category.name, path: domainPath });
           const data = read(fromPath);
-
           data.forEach((subCategory, subIndex) => {
             fromPath = path.join(origin, category.name, subCategory.name);
+            domainPath = path.join(domain, category.name, subCategory.name);
             if (subCategory.isDirectory()) {
               const objectHandler = {
                 name: subCategory.name,
-                path: fromPath,
+                path: domainPath,
               }
 
               if (!dirTree[i].subCategories) dirTree[i].subCategories = [];
@@ -37,7 +40,7 @@ function crawler(prop) {
                 if (file.isFile && file.name.match(/\.md/g)) {
                   const objectHandler = {
                     name: file.name,
-                    path: fromPath,
+                    path: domainPath,
                   }
                   if (!dirTree[i].subCategories[subIndex].cheats) dirTree[i].subCategories[subIndex].cheats = [];
                   dirTree[i].subCategories[subIndex].cheats.push(objectHandler);
@@ -59,7 +62,7 @@ function crawler(prop) {
 
   return dirTree;
 }
-
+// crawler('cheatsheets');
 module.exports = {
   crawler
 }
