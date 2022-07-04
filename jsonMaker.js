@@ -69,6 +69,7 @@ const main = () => {
     (() => {
         const rawCheatsheets = crawler('cheatsheets');
         rawCheatsheets.forEach((category) => {
+            delete category.icon;
             write(category.path + '/', 'index.json', JSON.stringify(category));
         });
     })();
@@ -83,6 +84,7 @@ const main = () => {
     (() => {
         const rawDictionary = crawler('dictionary');
         const rawCheatsheets = crawler('cheatsheets');
+        rawCheatsheets.forEach((category) => delete category.subCategories);
         write('./content/', 'index.json', JSON.stringify({cheatsheets: rawCheatsheets, dictionary:rawDictionary}));
     })();
 }
