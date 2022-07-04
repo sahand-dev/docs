@@ -8,8 +8,8 @@ const { crawler } = require('./crawler');
 
 
 function write(path, name, data) {
-    fs.writeFile(`${__dirname}/${path}${name}`, data, (error)=>{
-        if(error) {
+    fs.writeFile(`${__dirname}/${path}${name}`, data, (error) => {
+        if (error) {
             console.log('\nThe operation encountered an error:')
             console.log(error.message.replace('ENOENT: ', '') + '\n');
         } else {
@@ -56,43 +56,56 @@ const contributors = [
     },
 ];
 
-const main = ()=>{
+const main = () => {
 
     // category page content 
-    (()=>{
+    (() => {
         const rawCheatsheets = crawler('cheatsheets');
-        rawCheatsheets.forEach((category)=> delete category.subCategories )
+        rawCheatsheets.forEach((category) => delete category.subCategories)
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
     })();
 
     // cheatsheets page content 
-    (()=>{
+    (() => {
         const rawCheatsheets = crawler('cheatsheets');
-        rawCheatsheets.forEach((category)=>{
+        rawCheatsheets.forEach((category) => {
             write(category.path + '/', 'index.json', JSON.stringify(category));
         });
+    })();
+
+
+
+    (() => {
+        const rawDictionary = crawler('dictionary');
+        write('./content/dictionary/', 'index.json', JSON.stringify(rawDictionary));
+    })();
+
+    (() => {
+        const rawDictionary = crawler('dictionary');
+        const rawCheatsheets = crawler('cheatsheets');
+        write('./content/', 'index.json', JSON.stringify({cheatsheets: rawCheatsheets, dictionary:rawDictionary}));
     })();
 }
 
 
 // Home page content
-const Home = ()=>{
+const Home = () => {
     const rawCheatsheets = crawler('cheatsheets');
     const rawDictionary = crawler('dictionary');
 
-    let categories = rawCheatsheets.filter((item, index)=> index < 6).map((object)=>{
+    let categories = rawCheatsheets.filter((item, index) => index < 6).map((object) => {
         let data = object;
         delete data.subCategories;
         return data
-    });    
-    const dictionary = rawDictionary.filter((item, index)=> index < 6);
+    });
+    const dictionary = rawDictionary.filter((item, index) => index < 6);
 
-    const json = {categories: categories, dictionary: dictionary, contributors: contributors};
+    const json = { categories: categories, dictionary: dictionary, contributors: contributors };
     write('./', 'index.json', JSON.stringify(json));
 }
 
 
-(()=>{
+(() => {
     Home();
     main();
 })();
