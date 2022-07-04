@@ -56,6 +56,7 @@ function crawler(prop) {
                   dirTree[index].subCategories[subIndex] = {
                     ...dirTree[index].subCategories[subIndex],
                     lebel: data.label,
+                    file_icon: data.icon
                   };
                   
 
@@ -72,7 +73,7 @@ function crawler(prop) {
                 ...dirTree[index],
                 lebel: data.label,
                 description: data.description,
-                // icon: data.icon
+                icon: data.icon
               }
             });
 
@@ -84,7 +85,7 @@ function crawler(prop) {
     } else if (prop === 'dictionary') {
       const data = read(origin);
 
-      // Listing sictionary markdown files
+      // Listing dictionary markdown files
       data.filter((item) => item.isFile() && item.name.match(/\.md/g))
         .forEach((file, index) => {
           let domainPath = domain + path.join(pathOnDomain, file.name);
