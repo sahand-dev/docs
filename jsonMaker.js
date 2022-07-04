@@ -1,23 +1,23 @@
 
 const fs = require('fs');
-
 const { crawler } = require('./crawler');
+
+
+
 
 
 
 function write(path, name, data) {
     fs.writeFile(`${__dirname}/${path}${name}`, data, (error)=>{
         if(error) {
-            console.log(error);
+            console.log('\nThe operation encountered an error:')
+            console.log(error.message.replace('ENOENT: ', '') + '\n');
         } else {
-            console.log('File written successfully\n');
+            console.log(`File "${name}" written successfully on ${path}\n`);
         }
     })
 }
 
-// function main() {
-    // Home();
-// }
 const contributors = [
     {
         name: 'Sahand',
@@ -55,25 +55,44 @@ const contributors = [
         image: 'https://avatars.githubusercontent.com/u/89129079?v=4',
     },
 ];
-const Home = ()=>{
-    const cheatsheets = crawler('cheatsheets');
 
-    let categories = cheatsheets.map((object)=>{
-        let data = object;
-        delete data.subCategories;
-        return data;
-    });
-    
-    const dictionary = crawler('dictionary');
-    const json = {categories: categories, dictionary: dictionary, contributors: contributors};
-    
-    const result = JSON.stringify(json);
-    write('./', 'index.json', result);
+const main = ()=>{
+
+    // category page content 
+    (()=>{
+        const rawCheatsheets = crawler('cheatsheets');
+        rawCheatsheets.forEach((category)=> delete category.subCategories )
+        write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
+    })();
+
+    // cheatsheets page content 
+    (()=>{
+        const rawCheatsheets = crawler('cheatsheets');
+        rawCheatsheets.forEach((category)=>{
+            write(category.path + '/', 'index.json', JSON.stringify(category));
+        });
+    })();
 }
 
 
-// console.log(crawler("dictionary"));
+// Home page content
+const Home = ()=>{
+    const rawCheatsheets = crawler('cheatsheets');
+    const rawDictionary = crawler('dictionary');
+
+    let categories = rawCheatsheets.filter((item, index)=> index < 6).map((object)=>{
+        let data = object;
+        delete data.subCategories;
+        return data
+    });    
+    const dictionary = rawDictionary.filter((item, index)=> index < 6);
+
+    const json = {categories: categories, dictionary: dictionary, contributors: contributors};
+    write('./', 'index.json', JSON.stringify(json));
+}
+
 
 (()=>{
     Home();
+    main();
 })();

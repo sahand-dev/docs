@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-
 function crawler(prop) {
   const origin = __dirname + '/content/' + prop;
   // const domain = 'https://cheatsheet.developix.ir/API/content'
@@ -11,63 +10,92 @@ function crawler(prop) {
   const read = (path) => {
     return fs.readdirSync(path, { withFileTypes: true });
   }
+  const readFile = (path) => {
+    return fs.readFileSync(path, { encoding: 'utf-8' });
+  }
 
   let dirTree = [];
   (() => {
     const rawData = read(origin);
 
-    if (prop == "cheatsheets") {
-      rawData.forEach((category, i) => {
-        let fromPath = path.join(origin, category.name);
-        let domainPath = domain + path.join(pathOnDomain, category.name);
-        if (category.isDirectory()) {
-          dirTree.push({ category: category.name, path: domainPath.replaceAll('\\', '/') });
-          const data = read(fromPath);
-          data.forEach((subCategory, subIndex) => {
-            fromPath = path.join(origin, category.name, subCategory.name);
-            domainPath = domain + path.join(pathOnDomain, category.name, subCategory.name);
-            if (subCategory.isDirectory()) {
-              const objectHandler = {
-                name: subCategory.name,
-                path: domainPath.replaceAll('\\', '/'),
+    if (prop === "cheatsheets") {
+
+      // Listing Categories
+      rawData.filter((item) => item.isDirectory())
+        .forEach((category, index) => {
+          const fromPath = path.join(origin, category.name);
+          const domainPath = path.join(domain, pathOnDomain, category.name);
+          dirTree.push({ id: index + 1, name: category.name, address: domainPath, path: path.join('content', 'cheatsheets', category.name) });
+
+          const rawData = read(fromPath);
+
+
+
+          // Listing subCategories
+          rawData.filter((item) => item.isDirectory())
+            .forEach((subCategory, subIndex) => {
+              const fromPath = path.join(origin, category.name, subCategory.name);
+              const domainPath = path.join(domain, pathOnDomain, category.name, subCategory.name);
+              if (!dirTree[index].subCategories) dirTree[index].subCategories = [];
+              dirTree[index].subCategories.push({ id: subIndex + 1, name: subCategory.name, address: domainPath, path: path.join('content', 'cheatsheets', category.name, subCategory.name) });
+
+
+              // Listing Markdown files
+              const rawData = read(fromPath);
+              rawData.filter((item) => item.isFile() && item.name.match(/\.md/g))
+                .forEach((file) => {
+                  if (!dirTree[index].subCategories[subIndex].cheats) dirTree[index].subCategories[subIndex].cheats = [];
+                  dirTree[index].subCategories[subIndex].cheats.push(file.name);
+                });
+
+
+              // Persian name for subCategories
+              rawData.filter((item) => item.isFile() && item.name.match(/details.json/g))
+                .forEach((file) => {
+                  const data = JSON.parse(readFile(fromPath + '/' + file.name));
+                  dirTree[index].subCategories[subIndex] = {
+                    ...dirTree[index].subCategories[subIndex],
+                    lebel: data.label,
+                  };
+                  
+
+                })
+            });
+
+
+
+          // Persian name and icon for category cards
+          rawData.filter((item) => item.isFile() && item.name.match(/details.json/g))
+            .forEach((file) => {
+              const data = JSON.parse(readFile(fromPath + '/' + file.name));
+              dirTree[index] = {
+                ...dirTree[index],
+                lebel: data.label,
+                description: data.description,
+                // icon: data.icon
               }
+            });
 
-              if (!dirTree[i].subCategories) dirTree[i].subCategories = [];
-              dirTree[i].subCategories.push(objectHandler);
 
-              const data = read(fromPath);
-              data.forEach((file) => {
-                domainPath = domain + path.join(pathOnDomain, category.name, subCategory.name, file.name);
-                if (file.isFile && file.name.match(/\.md/g)) {
-                  const objectHandler = {
-                    name: file.name,
-                    path: domainPath.replaceAll('\\', '/'),
-                  }
-                  if (!dirTree[i].subCategories[subIndex].cheats) dirTree[i].subCategories[subIndex].cheats = [];
-                  dirTree[i].subCategories[subIndex].cheats.push(objectHandler);
-                }
-              })
+        });
 
-            }
-          })
-        }
 
-      })
-    } else {
+
+    } else if (prop === 'dictionary') {
       const data = read(origin);
-      data.forEach((file)=>{
-        let fromPath = path.join(origin, file.name);
-        if (file.isFile() && file.name.match(/\.md/g)) {
+
+      // Listing sictionary markdown files
+      data.filter((item) => item.isFile() && item.name.match(/\.md/g))
+        .forEach((file, index) => {
           let domainPath = domain + path.join(pathOnDomain, file.name);
-          dirTree.push({ name: file.name, path: domainPath.replaceAll('\\', '/') });
-        }
-      })
+          dirTree.push({ id: index + 1, name: file.name, path: domainPath.replaceAll('\\', '/') });
+        });
     }
   })();
-
+  
   return dirTree;
 }
-// crawler('cheatsheets');
+
 module.exports = {
   crawler
 }
