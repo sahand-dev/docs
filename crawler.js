@@ -71,7 +71,8 @@ function crawler(prop) {
                 ...dirTree[index],
                 label: data.label,
                 description: data.description,
-                icon: data.icon
+                // icon: data.icon
+                icon: "<svg width=\"44\" height=\"44\" viewBox=\"0 0 44 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M22 34.8333L34.8333 22L40.3333 27.5L27.5 40.3333L22 34.8333Z\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M32.9998 23.8333L30.2498 10.0833L3.6665 3.66663L10.0832 30.25L23.8332 33L32.9998 23.8333Z\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M3.6665 3.66663L17.5742 17.5743\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M20.1667 23.8333C22.1917 23.8333 23.8333 22.1917 23.8333 20.1667C23.8333 18.1416 22.1917 16.5 20.1667 16.5C18.1416 16.5 16.5 18.1416 16.5 20.1667C16.5 22.1917 18.1416 23.8333 20.1667 23.8333Z\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
               }
             });
 
