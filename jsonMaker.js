@@ -99,7 +99,7 @@ const main = () => {
         const rawCheatsheets = crawler('cheatsheets');
         rawCheatsheets.forEach((category, index) => { 
             delete category.subCategories;
-            category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+            // category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
         });
 
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
@@ -116,20 +116,12 @@ const main = () => {
 
 
 
-    // (() => {
-    //     const rawDictionary = crawler('dictionary');
-    //     rawDictionary.forEach((data)=>{
-    //         console.log(data.path);
-    //         console.log(readFile(data.path));
-    //     })
-    //     write('./content/dictionary/', 'index.json', JSON.stringify(rawDictionary));
-    // })();
-
     (() => {
         const rawDictionary = crawler('dictionary');
-        const rawCheatsheets = crawler('cheatsheets');
-        rawCheatsheets.forEach((category) => delete category.subCategories);
-        write('./content/', 'index.json', JSON.stringify({cheatsheets: rawCheatsheets, dictionary:rawDictionary}));
+        rawDictionary.forEach((data)=>{
+            delete data.path;
+        })
+        write('./content/dictionary/', 'index.json', JSON.stringify(rawDictionary));
     })();
 }
 
@@ -147,7 +139,8 @@ const Home = () => {
     const dictionary = rawDictionary.filter((item, index) => index < 6);
 
     const json = { categories: categories, dictionary: dictionary, contributors: contributors };
-    write('./', 'index.json', JSON.stringify(json));
+    write('./content/', 'index.json', JSON.stringify(json));
+
 }
 
 
