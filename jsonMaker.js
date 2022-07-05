@@ -99,7 +99,7 @@ const main = () => {
         const rawCheatsheets = crawler('cheatsheets');
         rawCheatsheets.forEach((category, index) => { 
             delete category.subCategories;
-            // category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+            category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
         });
 
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
