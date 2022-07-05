@@ -55,7 +55,7 @@ function crawler(prop) {
                   const data = JSON.parse(readFile(fromPath + '/' + file.name));
                   dirTree[index].subCategories[subIndex] = {
                     ...dirTree[index].subCategories[subIndex],
-                    lebel: data.label,
+                    label: data.label,
                     file_icon: data.icon
                   };
                 });
