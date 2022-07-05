@@ -86,8 +86,8 @@ const colors = [
 ]
 const main = () => {
     const gradientGenerator = (firstColor, secondColor, degree = 180) =>{
-        const gardient = `background: linear-gradient(${degree}deg, ${firstColor} 0%, ${secondColor} 50%, ${secondColor} 100%);`;
-        return gardient;
+        const gradient = `background: linear-gradient(${degree}deg, ${firstColor} 0%, ${secondColor} 50%, ${secondColor} 100%);`;
+        return gradient;
     }
 
 
@@ -97,7 +97,7 @@ const main = () => {
         const rawCheatsheets = crawler('cheatsheets');
         rawCheatsheets.forEach((category, index) => { 
             delete category.subCategories;
-            category.gardient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+            category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
         });
 
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
