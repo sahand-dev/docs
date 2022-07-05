@@ -16,7 +16,7 @@ function crawler(prop) {
 
   let dirTree = [];
   (() => {
-    const rawData = read(origin);
+    const rawData = read(origin).sort((a, b) => fs.statSync(origin + '/' + a.name).ctime.getTime() - fs.statSync(origin + '/' + b.name).ctime.getTime());
 
     if (prop === "cheatsheets") {
 
@@ -27,8 +27,7 @@ function crawler(prop) {
           const domainPath = path.join(domain, pathOnDomain, category.name);
           dirTree.push({ id: index + 1, name: category.name, address: domainPath, path: path.join('content', 'cheatsheets', category.name) });
 
-          const rawData = read(fromPath);
-
+          const rawData = read(fromPath).sort((a, b) => fs.statSync(fromPath + '/' + a.name).ctime.getTime() - fs.statSync(fromPath + '/' + b.name).ctime.getTime());
 
 
           // Listing subCategories
@@ -41,7 +40,8 @@ function crawler(prop) {
 
 
               // Listing Markdown files
-              const rawData = read(fromPath);
+              const rawData = read(fromPath).sort((a, b) => fs.statSync(fromPath + '/' + a.name).ctime.getTime() - fs.statSync(fromPath + '/' + b.name).ctime.getTime());
+
               rawData.filter((item) => item.isFile() && item.name.match(/\.md/g))
                 .forEach((file) => {
                   if (!dirTree[index].subCategories[subIndex].cheats) dirTree[index].subCategories[subIndex].cheats = [];
@@ -58,9 +58,7 @@ function crawler(prop) {
                     lebel: data.label,
                     file_icon: data.icon
                   };
-                  
-
-                })
+                });
             });
 
 
@@ -89,7 +87,8 @@ function crawler(prop) {
       data.filter((item) => item.isFile() && item.name.match(/\.md/g))
         .forEach((file, index) => {
           let domainPath = domain + path.join(pathOnDomain, file.name);
-          dirTree.push({ id: index + 1, name: file.name, path: domainPath.replaceAll('\\', '/') });
+          const fromPath = path.join(__dirname, 'content', 'dictionary', file.name);
+          dirTree.push({ id: index + 1, name: file.name, address: domainPath.replaceAll('\\', '/'), path: fromPath });
         });
     }
   })();

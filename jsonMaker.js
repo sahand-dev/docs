@@ -17,6 +17,9 @@ function write(path, name, data) {
         }
     })
 }
+function readFile(path) {
+    return fs.readFileSync(path, {encoding: 'utf-8'});
+}
 
 const contributors = [
     {
@@ -55,13 +58,48 @@ const contributors = [
         image: 'https://avatars.githubusercontent.com/u/89129079?v=4',
     },
 ];
-
+const colors = [
+    {
+        firstColor: '#6c2cf5',
+        secondColor: '#d550e6'
+    },
+    {
+        firstColor: '#fde31d',
+        secondColor: '#b43a65'
+    },
+    {
+        firstColor: '#8000ff',
+        secondColor: '#e100ff'
+    },
+    {
+        firstColor: '#6c2cf5',
+        secondColor: '#d550e6'
+    },
+    {
+        firstColor: '#6c2cf5',
+        secondColor: '#d550e6'
+    },
+    {
+        firstColor: '#6c2cf5',
+        secondColor: '#d550e6'
+    },
+]
 const main = () => {
+    const gradientGenerator = (firstColor, secondColor, degree = 180) =>{
+        const gardient = `background: linear-gradient(${degree}deg, ${firstColor} 0%, ${secondColor} 50%, ${secondColor} 100%);`;
+        return gardient;
+    }
 
-    // category page content 
+
+
+    // categories page content 
     (() => {
         const rawCheatsheets = crawler('cheatsheets');
-        rawCheatsheets.forEach((category) => delete category.subCategories)
+        rawCheatsheets.forEach((category, index) => { 
+            delete category.subCategories;
+            category.gardient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+        });
+
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
     })();
 
@@ -76,10 +114,14 @@ const main = () => {
 
 
 
-    (() => {
-        const rawDictionary = crawler('dictionary');
-        write('./content/dictionary/', 'index.json', JSON.stringify(rawDictionary));
-    })();
+    // (() => {
+    //     const rawDictionary = crawler('dictionary');
+    //     rawDictionary.forEach((data)=>{
+    //         console.log(data.path);
+    //         console.log(readFile(data.path));
+    //     })
+    //     write('./content/dictionary/', 'index.json', JSON.stringify(rawDictionary));
+    // })();
 
     (() => {
         const rawDictionary = crawler('dictionary');
