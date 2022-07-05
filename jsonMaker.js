@@ -60,33 +60,35 @@ const contributors = [
 ];
 const colors = [
     {
-        firstColor: '#6c2cf5',
-        secondColor: '#d550e6'
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
     },
     {
-        firstColor: '#fde31d',
-        secondColor: '#b43a65'
+        firstColor: '#FFDDBD',
+        secondColor: '#FFAA5B'
     },
     {
-        firstColor: '#8000ff',
-        secondColor: '#e100ff'
+        firstColor: '#C0D9FF',
+        secondColor: '#5096FF'
     },
     {
-        firstColor: '#6c2cf5',
-        secondColor: '#d550e6'
+        firstColor: '#FFC0C0',
+        secondColor: '#FF7474'
     },
     {
-        firstColor: '#6c2cf5',
-        secondColor: '#d550e6'
+        firstColor: '#F9CEFF',
+        secondColor: '#E963FD'
     },
     {
-        firstColor: '#6c2cf5',
-        secondColor: '#d550e6'
+        firstColor: '#80FAE3',
+        secondColor: '#12BFA0'
     },
-]
+];
+
+
 const main = () => {
     const gradientGenerator = (firstColor, secondColor, degree = 180) =>{
-        const gradient = `background: linear-gradient(${degree}deg, ${firstColor} 0%, ${secondColor} 50%, ${secondColor} 100%);`;
+        const gradient = `background: linear-gradient(${degree}deg, ${secondColor} 0%, ${firstColor} 50%, ${secondColor} 100%);`;
         return gradient;
     }
 
