@@ -69,7 +69,7 @@ function crawler(prop) {
               const data = JSON.parse(readFile(fromPath + '/' + file.name));
               dirTree[index] = {
                 ...dirTree[index],
-                lebel: data.label,
+                label: data.label,
                 description: data.description,
                 icon: data.icon
               }
