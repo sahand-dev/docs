@@ -85,12 +85,14 @@ const colors = [
     },
 ];
 
+const gradientGenerator = (firstColor, secondColor, degree = 180) =>{
+    return `background-image: linear-gradient(${degree}deg, ${secondColor} 0%, ${firstColor} 50%, ${secondColor} 100%);`;
+}
+const boxShadowGenerator = (color)=>{
+    return `box-shadow: 0px 4px 8px ${color};`
+}
 
 const main = () => {
-    const gradientGenerator = (firstColor, secondColor, degree = 180) =>{
-        const gradient = `background: linear-gradient(${degree}deg, ${secondColor} 0%, ${firstColor} 50%, ${secondColor} 100%);`;
-        return gradient;
-    }
 
 
 
@@ -100,6 +102,7 @@ const main = () => {
         rawCheatsheets.forEach((category, index) => { 
             delete category.subCategories;
             category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+            category.shadow = boxShadowGenerator(colors[index].firstColor);
         });
 
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
@@ -131,9 +134,12 @@ const Home = () => {
     const rawCheatsheets = crawler('cheatsheets');
     const rawDictionary = crawler('dictionary');
 
-    let categories = rawCheatsheets.filter((item, index) => index < 6).map((object) => {
+    let categories = rawCheatsheets.filter((item, index) => index < 6).map((object, index) => {
         let data = object;
+        object.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+        object.shadow = boxShadowGenerator(colors[index].firstColor);
         delete data.subCategories;
+        
         return data
     });
     const dictionary = rawDictionary.filter((item, index) => index < 6);
