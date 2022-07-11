@@ -99,12 +99,15 @@ const main = () => {
     // categories page content 
     (() => {
         const rawCheatsheets = crawler('cheatsheets');
+        let counter = -1;
         rawCheatsheets.forEach((category, index) => { 
+            if(counter >= 5) counter = -1;
+            counter++;
             delete category.subCategories;
             delete category.path;
-            category.color = colors[index].secondColor;
-            category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
-            category.shadow = boxShadowGenerator(colors[index].firstColor);
+            category.color = colors[counter].secondColor;
+            category.gradient = gradientGenerator(colors[counter].firstColor, colors[counter].secondColor);
+            category.shadow = boxShadowGenerator(colors[counter].firstColor);
         });
 
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));
@@ -115,7 +118,13 @@ const main = () => {
         const rawCheatsheets = crawler('cheatsheets');
         rawCheatsheets.forEach((category, index) => {
             delete category.icon;
-            category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
+            let counter = -1;
+            category.subCategories.forEach((subCategories)=>{
+                if(counter >= 5) counter = -1;
+                counter++;
+                subCategories.header_background = gradientGenerator(colors[counter].firstColor, colors[counter].secondColor);
+            });
+
             write(category.path + '/', 'index.json', JSON.stringify(category));
         });
     })();
@@ -126,7 +135,8 @@ const main = () => {
         const rawDictionary = crawler('dictionary');
         rawDictionary.forEach((data)=>{
             delete data.path;
-        })
+        });
+
         write('./content/dictionary/', 'index.json', JSON.stringify(rawDictionary));
     })();
 }
@@ -153,8 +163,8 @@ const Home = () => {
     write('./content/', 'index.json', JSON.stringify(json));
 
 }
-
-
+// const rawCheatsheets = crawler('cheatsheets');
+// console.log(rawCheatsheets);
 (() => {
     Home();
     main();
