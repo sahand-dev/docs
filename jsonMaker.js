@@ -113,8 +113,9 @@ const main = () => {
     // cheatsheets page content 
     (() => {
         const rawCheatsheets = crawler('cheatsheets');
-        rawCheatsheets.forEach((category) => {
+        rawCheatsheets.forEach((category, index) => {
             delete category.icon;
+            category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
             write(category.path + '/', 'index.json', JSON.stringify(category));
         });
     })();

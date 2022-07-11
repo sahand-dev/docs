@@ -59,15 +59,15 @@ function crawler(prop) {
                     file_icon: data.icon
                   };
                 });
-              rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
-                .forEach((file) => {
-                  const domainPath = path.join(domain, pathOnDomain, category.name, subCategory.name, file.name);
-                  console.log(domainPath);
-                  dirTree[index].subCategories[subIndex] = {
-                    ...dirTree[index].subCategories[subIndex],
-                    header_background: domainPath,
-                  };
-                });
+              // rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
+              //   .forEach((file) => {
+              //     const domainPath = path.join(domain, pathOnDomain, category.name, subCategory.name, file.name);
+              //     console.log(domainPath);
+              //     dirTree[index].subCategories[subIndex] = {
+              //       ...dirTree[index].subCategories[subIndex],
+              //       header_background: domainPath,
+              //     };
+              //   });
             });
 
 
@@ -86,15 +86,15 @@ function crawler(prop) {
             });
 
           // Cheatsheets page header background
-          rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
-            .forEach((file) => {
-              const domainPath = path.join(domain, pathOnDomain, category.name, file.name);
-              console.log(domainPath);
-              dirTree[index] = {
-                ...dirTree[index],
-                header_background: domainPath,
-              }
-            });
+          // rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
+          //   .forEach((file) => {
+          //     const domainPath = path.join(domain, pathOnDomain, category.name, file.name);
+          //     console.log(domainPath);
+          //     dirTree[index] = {
+          //       ...dirTree[index],
+          //       header_background: domainPath,
+          //     }
+          //   });
 
 
         });
