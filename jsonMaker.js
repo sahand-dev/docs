@@ -101,6 +101,8 @@ const main = () => {
         const rawCheatsheets = crawler('cheatsheets');
         rawCheatsheets.forEach((category, index) => { 
             delete category.subCategories;
+            delete category.path;
+            category.color = colors[index].secondColor;
             category.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
             category.shadow = boxShadowGenerator(colors[index].firstColor);
         });
@@ -134,11 +136,13 @@ const Home = () => {
     const rawCheatsheets = crawler('cheatsheets');
     const rawDictionary = crawler('dictionary');
 
-    let categories = rawCheatsheets.filter((item, index) => index < 6).map((object, index) => {
+    let categories = rawCheatsheets.filter((_, index) => index < 6).map((object, index) => {
         let data = object;
         object.gradient = gradientGenerator(colors[index].firstColor, colors[index].secondColor);
         object.shadow = boxShadowGenerator(colors[index].firstColor);
         delete data.subCategories;
+        object.color = colors[index].secondColor;
+
         
         return data
     });

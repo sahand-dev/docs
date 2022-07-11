@@ -28,7 +28,7 @@ function crawler(prop) {
           dirTree.push({ id: index + 1, name: category.name, address: domainPath, path: path.join('content', 'cheatsheets', category.name) });
 
           const rawData = read(fromPath).sort((a, b) => fs.statSync(fromPath + '/' + a.name).ctime.getTime() - fs.statSync(fromPath + '/' + b.name).ctime.getTime());
-
+          console.log(category.name)
 
           // Listing subCategories
           rawData.filter((item) => item.isDirectory())
@@ -59,6 +59,15 @@ function crawler(prop) {
                     file_icon: data.icon
                   };
                 });
+              rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
+                .forEach((file) => {
+                  const domainPath = path.join(domain, pathOnDomain, category.name, subCategory.name, file.name);
+                  console.log(domainPath);
+                  dirTree[index].subCategories[subIndex] = {
+                    ...dirTree[index].subCategories[subIndex],
+                    header_background: domainPath,
+                  };
+                });
             });
 
 
@@ -73,6 +82,17 @@ function crawler(prop) {
                 description: data.description,
                 // icon: data.icon
                 icon: "<svg width=\"44\" height=\"44\" viewBox=\"0 0 44 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M22 34.8333L34.8333 22L40.3333 27.5L27.5 40.3333L22 34.8333Z\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M32.9998 23.8333L30.2498 10.0833L3.6665 3.66663L10.0832 30.25L23.8332 33L32.9998 23.8333Z\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M3.6665 3.66663L17.5742 17.5743\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n<path d=\"M20.1667 23.8333C22.1917 23.8333 23.8333 22.1917 23.8333 20.1667C23.8333 18.1416 22.1917 16.5 20.1667 16.5C18.1416 16.5 16.5 18.1416 16.5 20.1667C16.5 22.1917 18.1416 23.8333 20.1667 23.8333Z\" stroke=\"#FF7777\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n</svg>\n",
+              }
+            });
+
+          // Cheatsheets page header background
+          rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
+            .forEach((file) => {
+              const domainPath = path.join(domain, pathOnDomain, category.name, file.name);
+              console.log(domainPath);
+              dirTree[index] = {
+                ...dirTree[index],
+                header_background: domainPath,
               }
             });
 
