@@ -15,7 +15,7 @@ function write(path, name, data) {
         } else {
             console.log(`File "${name}" written successfully on ${path}\n`);
         }
-    })
+    });
 }
 function readFile(path) {
     return fs.readFileSync(path, {encoding: 'utf-8'});
@@ -58,6 +58,33 @@ const contributors = [
         image: 'https://avatars.githubusercontent.com/u/89129079?v=4',
     },
 ];
+
+const subCategoryColors = [
+    {
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
+    },
+    {
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
+    },
+    {
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
+    },
+    {
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
+    },
+    {
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
+    },
+    {
+        firstColor: '#EBC2FF',
+        secondColor: '#D37AFF'
+    },
+]
 const colors = [
     {
         firstColor: '#EBC2FF',
@@ -116,17 +143,21 @@ const main = () => {
     // cheatsheets page content 
     (() => {
         const rawCheatsheets = crawler('cheatsheets');
+        let counter = -1;
         rawCheatsheets.forEach((category, index) => {
+            if(counter >= 5) counter = -1;
+            counter++;
             delete category.icon;
-            let counter = -1;
+            let subCounter = -1;
             category.subCategories.forEach((subCategories)=>{
-                if(counter >= 5) counter = -1;
-                counter++;
-                subCategories.header_background = gradientGenerator(colors[counter].firstColor, colors[counter].secondColor);
+                if(subCounter >= 5) subCounter = -1;
+                subCounter++;
+                subCategories.header_background = gradientGenerator(subCategoryColors[subCounter].firstColor, subCategoryColors[subCounter].secondColor);
             });
-
+            category.header_background = gradientGenerator(colors[counter].firstColor, colors[counter].secondColor);
             write(category.path + '/', 'index.json', JSON.stringify(category));
         });
+
     })();
 
 
@@ -163,8 +194,7 @@ const Home = () => {
     write('./content/', 'index.json', JSON.stringify(json));
 
 }
-// const rawCheatsheets = crawler('cheatsheets');
-// console.log(rawCheatsheets);
+
 (() => {
     Home();
     main();
