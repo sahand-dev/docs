@@ -128,10 +128,9 @@ function crawler(prop) {
         });
     }
   })();
-  console.log(dirTree[1].subCategories[0].cheats[0]);
   return dirTree;
 }
-crawler("cheatsheets");
+
 module.exports = {
   crawler
 }
