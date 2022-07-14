@@ -135,6 +135,7 @@ const main = () => {
             category.color = colors[counter].secondColor;
             category.gradient = gradientGenerator(colors[counter].firstColor, colors[counter].secondColor);
             category.shadow = boxShadowGenerator(colors[counter].firstColor);
+            category.header_background = gradientGenerator(colors[counter].firstColor, colors[counter].secondColor);
         });
 
         write('./content/cheatsheets/', 'index.json', JSON.stringify(rawCheatsheets));

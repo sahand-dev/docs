@@ -41,10 +41,29 @@ function crawler(prop) {
               // Listing Markdown files
               const rawData = read(fromPath).sort((a, b) => fs.statSync(fromPath + '/' + a.name).ctime.getTime() - fs.statSync(fromPath + '/' + b.name).ctime.getTime());
 
-              rawData.filter((item) => item.isFile() && item.name.match(/\.md/g))
-                .forEach((file) => {
-                  if (!dirTree[index].subCategories[subIndex].cheats) dirTree[index].subCategories[subIndex].cheats = [];
-                  dirTree[index].subCategories[subIndex].cheats.push(file.name);
+              rawData.filter((item) => item.isDirectory())
+                .forEach((folder, folderIndex) => {
+                  const fromPath = path.join(origin, category.name, subCategory.name, folder.name);
+                  const rawData = read(fromPath).sort((a, b) => fs.statSync(fromPath + '/' + a.name).ctime.getTime() - fs.statSync(fromPath + '/' + b.name).ctime.getTime());
+                  if(!dirTree[index].subCategories[subIndex].cheats) dirTree[index].subCategories[subIndex].cheats = [];
+                  rawData.filter((item)=> item.isFile() && item.name.match(/\.md/g))
+                    .forEach((file)=>{
+                      const domainPath = path.join(domain, pathOnDomain, category.name, subCategory.name, folder.name, file.name);
+                      dirTree[index].subCategories[subIndex].cheats.push({name: file.name, address: domainPath})
+                    });
+
+
+                  rawData.filter((item)=> item.isFile() && item.name.match(/details.json/g))
+                    .forEach((file)=>{
+                      const data = JSON.parse(readFile(fromPath + '/' + file.name));
+                      // console.log(dirTree[index].subCategories[subIndex].cheats[folderIndex]);
+                      dirTree[index].subCategories[subIndex].cheats[folderIndex] = {
+                        ...dirTree[index].subCategories[subIndex].cheats[folderIndex],
+                        label: data.label,
+                        description: data.description,
+                        icon: data.icon
+                      };
+                    });
                 });
 
 
@@ -55,7 +74,6 @@ function crawler(prop) {
                   dirTree[index].subCategories[subIndex] = {
                     ...dirTree[index].subCategories[subIndex],
                     label: data.label,
-                    file_icon: data.icon
                   };
                 });
               // rawData.filter((item) => item.isFile() && item.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i))
@@ -110,10 +128,10 @@ function crawler(prop) {
         });
     }
   })();
-  
+  console.log(dirTree[1].subCategories[0].cheats[0]);
   return dirTree;
 }
-
+crawler("cheatsheets");
 module.exports = {
   crawler
 }
